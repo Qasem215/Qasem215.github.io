@@ -33,7 +33,7 @@ Let's also create a place where we can store any primes we discover.  A list wil
 primes_list = []
 ```
 
-We're going to end up using a while loop to iterate through our list and check for primes, but before we construct that I always it valuable to code up the logic and iterate manually first.  This means I can check that it is working correctly before I set it off to run through everything on it's own
+We're going to end up using a while loop to iterate through our list and check for primes, but before we construct that I always find it valuable to code up the logic and iterate manually first.  This means I can check that it is working correctly before I set it off to run through everything on it's own
 
 So, we have our set of numbers (called number_range to check all integers between 2 and 20. Let's extract the first number from that set that we want to check as to whether it's a prime. When we check the value we're going to check if it is a prime...if it is, we're going to add it to our list called primes_list...if it isn't a prime we don't want to keep it
 
@@ -69,7 +69,7 @@ We're going to again use a set rather than a list, because it allows us some spe
 multiples = set(range(prime*2, n+1, prime))
 ```
 
-Remember that when created a range the syntax is range(start, stop, step). For the starting point - we don't need our number as that has already been added as a prime, so let's start our range of multiples at 2 * our number as that is the first multiple, in our case, our number is 2 so the first multiple will be 4. If the number we were checking was 3 then the first multiple would be 6 - and so on.
+Remember that when we created a range the syntax is range(start, stop, step). For the starting point - we don't need our number as that has already been added as a prime, so let's start our range of multiples at 2 * our number as that is the first multiple, in our case, our number is 2 so the first multiple will be 4. If the number we were checking was 3 then the first multiple would be 6 - and so on.
 
 For the stopping point of our range - we specify that we want our range to go up to 20, so we use n+1 to specify that we want 20 to be included.
 
@@ -82,7 +82,7 @@ print(multiples)
 >>> {4, 6, 8, 10, 12, 14, 16, 18, 20}
 ```
 
-The next part is the magic I spoke about earlier, we're using the special set functionality **difference_update** which removes any values from our number range that are multiples of the number we just checked. The reason we're doing this is because if a number is a multiple of anything other than 1 or itself then it is **not a prime number** and can remove it from the list to be checked.
+The next part is the magic I spoke about earlier, we're using the special set functionality **difference_update** which removes any values from our number range that are multiples of the number we just checked. The reason we're doing this is because if a number is a multiple of anything other than 1 or itself then it is **not a prime number** and we can remove it from the list to be checked.
 
 Before we apply the **difference_update**, let's look at our two sets.
 
@@ -110,7 +110,7 @@ This is amazing!  We've made a massive reduction to the pool of numbers that nee
 
 Whenever you can run sometime over and over again, a while loop is often a good solution.
 
-Here is the code, with a while loop doing the hard work of updated the number list and extracting primes until the list is empty.
+Here is the code, with a while loop doing the hard work of updating the number list and extracting primes until the list is empty.
 
 Let's run it for any primes below 1000...
 
