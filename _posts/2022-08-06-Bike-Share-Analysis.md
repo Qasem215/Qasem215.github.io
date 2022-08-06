@@ -410,20 +410,157 @@ aggregate(cyclistic_v2$ride_length ~ cyclistic_v2$member_casual, FUN = min)
     2                     member                        1
 
 ```
-to get the average ride time by day of week for members vs casual users, we use the same aggregation function, but add another 
+to get the average ride time by day of week for members vs casual users, we use the same aggregation function, but add the day of week to the aggregation
 ```ruby
+aggregate(cyclistic_v2$ride_length, list(cyclistic_v2$member_casual, cyclistic_v2$day_of_week), FUN=mean)
 
+   >>> Group.1   Group.2         x
+    1   casual    Friday 1696.1002
+    2   member    Friday  763.6394
+    3   casual    Monday 1837.7099
+    4   member    Monday  758.2602
+    5   casual  Saturday 1934.4052
+    6   member  Saturday  871.8730
+    7   casual    Sunday 2067.6086
+    8   member    Sunday  881.4162
+    9   casual  Thursday 1634.0557
+    10  member  Thursday  747.8117
+    11  casual   Tuesday 1544.8222
+    12  member   Tuesday  731.5243
+    13  casual Wednesday 1544.6104
+    14  member Wednesday  732.5412
 
 ```
+To organize the days from Sunday to Saturday:
 
 ```ruby
-
+cyclistic_v2$day_of_week <- 
+  ordered(cyclistic_v2$day_of_week,
+          levels=c(   "Sunday",
+                      "Monday",
+                      "Tuesday",
+                      "Wednesday",
+                      "Thursday",
+                      "Friday",
+                      "Saturday"))
 
 ```
+Then running the previos code:
 
+```ruby
+aggregate(cyclistic_v2$ride_length, list(cyclistic_v2$member_casual, cyclistic_v2$day_of_week), FUN=mean)
 
+   >>> Group.1   Group.2         x
+    1   casual    Sunday 2067.6086
+    2   member    Sunday  881.4162
+    3   casual    Monday 1837.7099
+    4   member    Monday  758.2602
+    5   casual   Tuesday 1544.8222
+    6   member   Tuesday  731.5243
+    7   casual Wednesday 1544.6104
+    8   member Wednesday  732.5412
+    9   casual  Thursday 1634.0557
+    10  member  Thursday  747.8117
+    11  casual    Friday 1696.1002
+    12  member    Friday  763.6394
+    13  casual  Saturday 1934.4052
+    14  member  Saturday  871.8730
+```
+we can also run this code for the median, maximum and minum ride lengths:
+```ruby
+aggregate(cyclistic_v2$ride_length, list(cyclistic_v2$member_casual, cyclistic_v2$day_of_week), FUN=median)
+  
+  >>> Group.1   Group.2    x
+    1   casual    Sunday 1035
+    2   member    Sunday  606
+    3   casual    Monday  895
+    4   member    Monday  523
+    5   casual   Tuesday  780
+    6   member   Tuesday  515
+    7   casual Wednesday  779
+    8   member Wednesday  523
+    9   casual  Thursday  792
+    10  member  Thursday  528
+    11  casual    Friday  847
+    12  member    Friday  537
+    13  casual  Saturday 1005
+    14  member  Saturday  610
+```
+```ruby
+aggregate(cyclistic_v2$ride_length, list(cyclistic_v2$member_casual, cyclistic_v2$day_of_week), FUN=max)
 
+   >>> Group.1   Group.2       x
+    1   casual    Sunday 2497750
+    2   member    Sunday   89996
+    3   casual    Monday 1861873
+    4   member    Monday   89997
+    5   casual   Tuesday 1500471
+    6   member   Tuesday   89997
+    7   casual Wednesday 2149238
+    8   member Wednesday   89998
+    9   casual  Thursday 2946429
+    10  member  Thursday   89997
+    11  casual    Friday 2321116
+    12  member    Friday   89998
+    13  casual  Saturday 2443476
+    14  member  Saturday   93594
+```
+```ruby
+aggregate(cyclistic_v2$ride_length, list(cyclistic_v2$member_casual, cyclistic_v2$day_of_week), FUN=min)
 
-
+   >>> Group.1   Group.2 x
+    1   casual    Sunday 1
+    2   member    Sunday 1
+    3   casual    Monday 1
+    4   member    Monday 1
+    5   casual   Tuesday 1
+    6   member   Tuesday 1
+    7   casual Wednesday 1
+    8   member Wednesday 1
+    9   casual  Thursday 1
+    10  member  Thursday 1
+    11  casual    Friday 1
+    12  member    Friday 1
+    13  casual  Saturday 1
+    14  member  Saturday 1
+```
+The statistical analysis shows that on any given day, casual riders have longer trips than annual memebers.
 
 ---
+Let's create a new dataset that shows the number of rides and average ride length per day of week for each customer type:
+
+```ruby
+summarized_data <- cyclistic_v2 %>% 
+  mutate(weekday = wday(started_at, label = TRUE)) %>%    #creates weekday field using wday() True gives day name 
+  group_by(member_casual, weekday) %>%                    #groups by usertype and weekday
+  summarize(number_of_rides = n()							            #calculates the number of rides and average duration 
+            ,average_duration = mean(ride_length)) %>% 		# calculates the average duration
+  arrange(member_casual, weekday)							          	# sorts
+  
+ print(summarized_data)
+ >>> # A tibble: 14 × 4
+    # Groups:   member_casual [2]
+       member_casual weekday number_of_rides average_duration
+       <chr>         <ord>             <int>            <dbl>
+     1 casual        Sun              467027            2068.
+     2 casual        Mon              303967            1838.
+     3 casual        Tue              277738            1545.
+     4 casual        Wed              285450            1545.
+     5 casual        Thu              325143            1634.
+     6 casual        Fri              363065            1696.
+     7 casual        Sat              535497            1934.
+     8 member        Sun              398881             881.
+     9 member        Mon              469011             758.
+    10 member        Tue              518207             732.
+    11 member        Wed              516507             733.
+    12 member        Thu              525901             748.
+    13 member        Fri              469221             764.
+    14 member        Sat              444124             872.
+ 
+```
+we can use this dataset for vizualization and analysis.
+---
+
+
+
+
