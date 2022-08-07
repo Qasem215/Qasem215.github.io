@@ -659,7 +659,7 @@ write.csv(summarized_month,
           "C:/"Enter your path and file name".csv",
           row.names = TRUE)
 ```
-This brings us to the end of data cleaning, processing and analysis, and the next step will be data visualization, which can be seen in the below link on Tabluae:
+This brings us to the end of data cleaning, processing and analysis, and the next step will be data visualization, which can be seen in the below link on Tableau:
 
 
 
