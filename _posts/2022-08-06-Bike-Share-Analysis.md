@@ -642,8 +642,25 @@ summarized_month <- cyclistic_v2 %>%
 
 ```
 
-we can use these datasets for vizualization and analysis.
+we can export these datasets for vizualization and analysis.
+
+STEP 5: Export summarized data for further analysis
 ---
+
+# by creating a csv file, we can export the data out of R and use it on Tablaue, excel or any other data viz tool
+
+```ruby
+write.csv(summarized_weekday,
+          "C:/"Enter your path and file name".csv",
+          row.names = TRUE)
+
+
+write.csv(summarized_month,
+          "C:/"Enter your path and file name".csv",
+          row.names = TRUE)
+```
+This brings us to the end of data cleaning, processing and analysis, and the next step will be data visualization, which can be seen in the below link on Tabluae:
+
 
 
 
