@@ -647,7 +647,7 @@ we can export these datasets for vizualization and analysis.
 STEP 5: Export summarized data for further analysis
 ---
 
-# by creating a csv file, we can export the data out of R and use it on Tablaue, excel or any other data viz tool
+by creating a csv file, we can export the data out of R and use it on Tablaue, excel or any other data viz tool
 
 ```ruby
 write.csv(summarized_weekday,
@@ -660,6 +660,21 @@ write.csv(summarized_month,
           row.names = TRUE)
 ```
 This brings us to the end of data cleaning, processing and analysis, and the next step will be data visualization, which can be seen in the below link on Tableau:
+
+https://public.tableau.com/views/CyclisticMembervsCasualRidersData/Weekdaydashboard_1?:language=en-US&:display_count=n&:origin=viz_share_link 
+
+After the analysis and visualization, these are my recomendations to convert casual riders to annual customers:
+
+1- Provide a weekly or monthly subscription trial for casual riders and share with them a visualization on the savings they can make by joining the annual membership, instead of paying per ride.
+
+2- The number of bike rides drops significantly during winter months and starts to go higher by the end of February, this provides a great chance for the company to sart advertising post winter to attract more customers.
+
+3- The data shows that casual customers have a higher ride duration than annaual riders on days of the week and also on monthly basis, therefore the company can set a cap on the length of time they can use the bike brfore being charged an extra amount. This will not apply to annual members and may help in converting customers.
+
+
+
+### Thank you for going through this project and analysis, and please feel free to contact me for any furthur details.
+
 
 
 
