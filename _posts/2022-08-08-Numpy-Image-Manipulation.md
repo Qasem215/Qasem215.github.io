@@ -103,7 +103,7 @@ io.imsave("camaro_vertical_flip.jpg", vertical_flip)
 ![camaro_vertical_flip](https://user-images.githubusercontent.com/105917242/183504204-a4a75b30-a6d7-4595-aab5-a9e52d72cc43.jpg)
 
 
-or horizontally (although it doesn;t seem much different from the original, but it's flipped):
+or horizontally (although it doesn't seem much different from the original, but it's flipped):
 
 ```ruby
 horizontal_flip = camaro[:,::-1,:] # to flip horizontally
