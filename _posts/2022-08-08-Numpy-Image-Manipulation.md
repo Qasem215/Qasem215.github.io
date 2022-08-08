@@ -112,7 +112,8 @@ plt.show()
 io.imsave("camaro_horizontal_flip.jpg", horizontal_flip)
 
 ```
-![camaro_vertical_flip](https://user-images.githubusercontent.com/105917242/183504438-a665062c-7d8c-4336-9213-b854cf7ceadf.jpg)
+![camaro_horizontal_flip](https://user-images.githubusercontent.com/105917242/183506098-5658a261-3922-4750-84d1-0eeb93181c77.jpg)
+
 
 We can even use numpy to create new images with specefic color channels:
 
