@@ -42,7 +42,7 @@ print(volumes)
 if we had the radius of a million planets, we could calculate their volumes as quick as typing the below function:
 
 ```ruby
-radii = np.random.randint(1,1000,1000000)
+radii = np.random.randint(1,1000,1000000) # creates an array of 1,000,000 elements of random integers between 1 and 1,000
 
 volumes = 4/3 * np.pi * radii ** 3
 print(volumes)
