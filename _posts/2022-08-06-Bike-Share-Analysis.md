@@ -677,6 +677,6 @@ After the analysis and visualization, these are my recomendations to convert cas
 
 
 
-
+image: "/posts/bicycles_image.jpg"
 
 
