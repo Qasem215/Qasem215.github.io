@@ -94,13 +94,11 @@ io.imsave("camaro_cropped.jpg", cropped) # to save the image
 
 we can also flip the image vertically:
 
-```rube
-
+```ruby
 vertical_flip = camaro[::-1,:,:] # to flip vertically
 plt.imshow(vertical_flip)
 plt.show()
 io.imsave("camaro_vertical_flip.jpg", vertical_flip)
-
 ```
 ![camaro_vertical_flip](https://user-images.githubusercontent.com/105917242/183504204-a4a75b30-a6d7-4595-aab5-a9e52d72cc43.jpg)
 
