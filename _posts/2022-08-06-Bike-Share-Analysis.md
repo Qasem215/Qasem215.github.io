@@ -706,6 +706,40 @@ ggsave("Average Ride Duration per Customer Type-weekday .png")             # sav
 
 ![Average Ride Duration per Customer Type-weekday ](https://user-images.githubusercontent.com/105917242/183484035-435839ad-b6c9-4d0a-9f8e-c94948d538d9.png)
 
+```ruby
+  ggplot(data = summarized_month) +
+  geom_col(mapping = aes(x = year_month,
+                          y = number_of_rides,
+                          fill = member_casual)) +
+  labs(title = "Cyclistic Number of Rides per Customer Type", # plot title
+       subtitle = "Monthly",                  # plot subtitle
+       y = "Number of Rides",
+       x = "year-Month") 
+  
+ggsave("Number of Rides per Customer Type-Monthly .png")             # save plot as
+
+```
+![Number of Rides per Customer Type-Monthly ](https://user-images.githubusercontent.com/105917242/183497314-c1d2a8e2-ad79-4e47-b72b-03c580de5195.png)
+
+```ruby
+
+ggplot(data = summarized_month) +
+  geom_point(mapping = aes(x = year_month,
+                         y = average_duration,
+                         color = member_casual,
+                         size = 3)) +
+  labs(title = "Cyclistic Number of Rides per Customer Type", # plot title
+       subtitle = "Monthly",                  # plot subtitle
+       y = "Number of Rides",
+       x = "year-Month") 
+
+ggsave("Average Ride Duration per Customer Type-Monthly .png")             # save plot as
+
+```
+
+![Average Ride Duration per Customer Type-Monthly ](https://user-images.githubusercontent.com/105917242/183497375-172a884e-bd05-4b83-843d-da922bc50963.png)
+
+
 After the analysis and visualization, these are my recomendations to convert casual riders to annual customers:
 
 1- Provide a weekly or monthly subscription trial for casual riders and share with them a visualization on the savings they can make by joining the annual membership, instead of paying per ride.
