@@ -659,9 +659,52 @@ write.csv(summarized_month,
           "C:/"Enter your path and file name".csv",
           row.names = TRUE)
 ```
-This brings us to the end of data cleaning, processing and analysis, and the next step will be data visualization, which can be seen in the below link on Tableau:
 
-https://public.tableau.com/views/CyclisticMembervsCasualRidersData/Weekdaydashboard_1?:language=en-US&:display_count=n&:origin=viz_share_link 
+Data visualization
+---
+
+To create data visualizations using R, for week day and monthly data, the following codes were used:
+
+```ruby
+
+summarized_weekday %>% 
+  ggplot(aes(x = weekday,                                       # x-axis is weekdays
+             y = number_of_rides,                               # y-axis is number of rides
+             fill = member_casual)) +                           # fill columns by customer type
+  geom_col(position = "dodge") +                                # separate bar for each customer type instead of stacked
+  labs(title = "Cyclistic Total Number of Rides per Customer",  # plot title
+     subtitle = "From 2021-07-01 to 2022-06-30",                # plot subtitle
+     y= "Number of Rides",                                      # y-axis label
+     x = "Week Day") +                                          # x-axis label
+  geom_text(aes(label = round(number_of_rides,-3)),             # add number of rides to the plot rounded to the nearest thousand
+            position = position_dodge(width = 0.9),             # positioning and colouring functions
+            vjust = -0.25, color = "black")
+
+ggsave("Number of Rides per Customer-weekday .png")             # save plot as
+
+```
+![Number of Rides per Customer-weekday ](https://user-images.githubusercontent.com/105917242/183483256-9c4576a5-a23f-405d-9e9f-c6aae94215de.png)
+
+```ruby
+
+summarized_weekday %>% 
+  ggplot(aes(x = weekday,                                           # x-axis is weekdays
+             y = average_duration,                                  # y-axis is number of rides
+             fill = member_casual)) +                               # fill columns by customer type
+  geom_col(position = "dodge") +                                    # separate bar for each customer type instead of stacked
+  labs(title = "Cyclistic Average Ride Duration per Customer Type", # plot title
+       subtitle = "From 2021-07-01 to 2022-06-30",                  # plot subtitle
+       y= "Average ride duration",                                  # y-axis label
+       x = "Week Day") +                                            # x-axis label
+  geom_text(aes(label = round(average_duration, 0)),                # add number of rides to the plot rounded to the nearest whole number
+            position = position_dodge(width = 0.9),                 # positioning and colouring functions
+            vjust = -0.25, color = "black")
+
+ggsave("Average Ride Duration per Customer Type-weekday .png")             # save plot as
+
+```
+
+![Average Ride Duration per Customer Type-weekday ](https://user-images.githubusercontent.com/105917242/183484035-435839ad-b6c9-4d0a-9f8e-c94948d538d9.png)
 
 After the analysis and visualization, these are my recomendations to convert casual riders to annual customers:
 
@@ -674,9 +717,5 @@ After the analysis and visualization, these are my recomendations to convert cas
 
 
 ### Thank you for going through this project and analysis, and please feel free to contact me for any furthur details.
-
-
-
-image: "/posts/bicycles_image.jpg"
 
 
