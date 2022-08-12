@@ -9,7 +9,7 @@ plugins:
 #-------------------------------
 # General Site Settings
 title: Qasem Al Hijji
-description: "I'm a Data Scientist, who's focused on learning and gaining experiene by building the projects you see here.  My portfolio focuses on interesting projects I've recently undertaken, with a strong emphasis on business impact. Please visit my Github & LinkedIn pages (or download my Resume) by using the links below!"
+description: "I'm a Data Scientist, who's focused on learning and gaining experience by building the projects you see here.  My portfolio focuses on interesting projects I've recently undertaken, with a strong emphasis on business impact. Please visit my Github & LinkedIn pages (or download my Resume) by using the links below!"
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
