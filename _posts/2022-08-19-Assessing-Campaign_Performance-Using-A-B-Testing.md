@@ -48,7 +48,9 @@ From the *campaign_data* table in the client database, we isolated customers tha
 We set out our hypotheses and Acceptance Criteria for the test, as follows:
 
 **Null Hypothesis:** There is no relationship between mailer type and signup rate. They are independent.
+
 **Alternate Hypothesis:** There is a relationship between mailer type and signup rate. They are not independent.
+
 **Acceptance Criteria:** 0.05
 
 As a requirement of the Chi-Square Test For Independence, we aggregated this data down to a 2x2 matrix for *signup_flag* by *mailer_type* and fed this into the algorithm (using the *scipy* library) to calculate the Chi-Square Statistic, p-value, Degrees of Freedom, and expected values
@@ -76,7 +78,7 @@ In other words - while we saw that the higher cost Mailer 2 had a higher signup 
 
 Without running this Hypothesis Test, the client may have concluded that they should always look to go with higher cost mailers - and from what we've seen in this test, that may not be a great decision.  It would result in them spending more, but not *necessarily* gaining any extra revenue as a result
 
-Our results here also do not say that there *definitely isn't a difference between the two mailers* - we are only advising that we should not make any rigid conclusions *at this point*.  
+Our results here also does not say that there *definitely isn't a difference between the two mailers* - we are only advising that we should not make any rigid conclusions *at this point*.  
 
 Running more A/B Tests like this, gathering more data, and then re-running this test may provide us, and the client more insight!
 
@@ -97,7 +99,7 @@ Application of A/B testing can range from testing different online ad strategies
 <br>
 #### Hypothesis Testing
 
-A Hypothesis Test is used to assess the plausibility, or likelihood of an assumed viewpoint based on sample data - in other words, a it helps us assess whether a certain view we have about some data is likely to be true or not.
+A Hypothesis Test is used to assess the plausibility, or likelihood of an assumed viewpoint based on sample data - in other words, it helps us assess whether a certain view we have about some data is likely to be true or not.
 
 There are many different scenarios we can run Hypothesis Tests on, and they all have slightly different techniques and formulas - however they all have some shared, fundamental steps & logic that underpin how they work.
 
@@ -167,7 +169,7 @@ import pandas as pd
 from scipy.stats import chi2_contingency, chi2
 
 # import campaign data
-campaign_data = ...
+campaign_data = pd.read_xlsx(io = "grocery_database.xlsx", sheet_name = "campaign_data")
 
 # remove customers who were in the control group
 campaign_data = campaign_data.loc[campaign_data["mailer_type"] != "Control"]
@@ -317,6 +319,6 @@ While we saw that the higher cost Mailer 2 had a higher signup rate (37.8%) than
 
 Without running this Hypothesis Test, the client may have concluded that they should always look to go with higher cost mailers - and from what we've seen in this test, that may not be a great decision.  It would result in them spending more, but not *necessarily* gaining any extra revenue as a result
 
-Our results here also do not say that there *definitely isn't a difference between the two mailers* - we are only advising that we should not make any rigid conclusions *at this point*.  
+Our results here also does not say that there *definitely isn't a difference between the two mailers* - we are only advising that we should not make any rigid conclusions *at this point*.  
 
 Running more A/B Tests like this, gathering more data, and then re-running this test may provide us, and the client more insight!
