@@ -56,16 +56,16 @@ Our testing found that the Random Forest had the highest predictive accuracy.
 <br>
 **Metric 1: Adjusted R-Squared (Test Set)**
 
-* Random Forest = 0.955
-* Decision Tree = 0.886
-* Linear Regression = 0.754
+* Random Forest = 0.954
+* Decision Tree = 0.860
+* Linear Regression = 0.836
 
 <br>
 **Metric 2: R-Squared (K-Fold Cross Validation, k = 4)**
 
-* Random Forest = 0.925
-* Decision Tree = 0.871
-* Linear Regression = 0.853
+* Random Forest = 0.930
+* Decision Tree = 0.879
+* Linear Regression = 0.856
 
 As the most important outcome for this project was predictive accuracy, rather than explicitly understanding weighted drivers of prediction, we chose the Random Forest as the model to use for making predictions on the customers who were missing the *loyalty score* metric.
 <br>
@@ -472,7 +472,7 @@ cv_scores.mean()
 
 ```
 
-The mean cross-validated r-squared score from this is **0.86**
+The mean cross-validated r-squared score from this is **0.856**
 
 <br>
 ##### Calculate Adjusted R-Squared
@@ -613,7 +613,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, rando
 <br>
 ##### Categorical Predictor Variables
 
-In our dataset, we have one categorical variable *gender* which has values of "M" for Male, "F" for Female, and "U" for Unknown.
+In our dataset, we have one categorical variable *gender* which has values of "M" for Male and "F" for Female.
 
 Just like the Linear Regression algorithm, the Decision Tree cannot deal with data in this format as it can't assign any numerical meaning to it when looking to assess the relationship between the variable and the dependent variable.
 
@@ -626,7 +626,7 @@ As *gender* doesn't have any explicit *order* to it, in other words, Male isn't 
 categorical_vars = ["gender"]
 
 # instantiate OHE class
-one_hot_encoder = OneHotEncoder(sparse=False, drop = "first")
+one_hot_encoder = OneHotEncoder(sparse = False, drop = "first")
 
 # apply OHE
 X_train_encoded = one_hot_encoder.fit_transform(X_train[categorical_vars])
@@ -688,7 +688,7 @@ print(r_squared)
 
 ```
 
-The resulting r-squared score from this is **0.898**
+The resulting r-squared score from this is **0.874**
 
 <br>
 ##### Calculate Cross Validated R-Squared
@@ -712,7 +712,7 @@ cv_scores.mean()
 
 ```
 
-The mean cross-validated r-squared score from this is **0.871** which is slighter higher than we saw for Linear Regression.
+The mean cross-validated r-squared score from this is **0.879** which is slighter higher than we saw for Linear Regression.
 
 <br>
 ##### Calculate Adjusted R-Squared
@@ -728,7 +728,7 @@ print(adjusted_r_squared)
 
 ```
 
-The resulting *adjusted* r-squared score from this is **0.887** which as expected, is slightly lower than the score we got for r-squared on it's own.
+The resulting *adjusted* r-squared score from this is **0.860** which as expected, is slightly lower than the score we got for r-squared on it's own.
 
 <br>
 ### Decision Tree Regularisation <a name="regtree-model-regularisation"></a>
@@ -763,6 +763,7 @@ max_accuracy_idx = accuracy_scores.index(max_accuracy)
 optimal_depth = max_depth_list[max_accuracy_idx]
 
 # plot accuracy by max depth
+plt.style.use('seaborn-poster')
 plt.plot(max_depth_list,accuracy_scores)
 plt.scatter(optimal_depth, max_accuracy, marker = "x", color = "red")
 plt.title(f"Accuracy by Max Depth \n Optimal Tree Depth: {optimal_depth} (Accuracy: {round(max_accuracy,4)})")
@@ -779,7 +780,7 @@ That code gives us the below plot - which visualises the results!
 ![alt text](/img/posts/regression-tree-max-depth-plot.png "Decision Tree Max Depth Plot")
 
 <br>
-In the plot we can see that the *maximum* classification accuracy on the test set is found when applying a *max_depth* value of 7.  However, we lose very little accuracy back to a value of 4, but this would result in a simpler model, that generalised even better on new data.  We make the executive decision to re-train our Decision Tree with a maximum depth of 4!
+In the plot we can see that the *maximum* classification accuracy on the test set is found when applying a *max_depth* value of 6.  However, we lose very little accuracy back to a value of 4, but this would result in a simpler model, that generalised even better on new data.  We make the executive decision to re-train our Decision Tree with a maximum depth of 4!
 
 <br>
 ### Visualise Our Decision Tree <a name="regtree-visualise"></a>
@@ -794,12 +795,12 @@ regressor = DecisionTreeRegressor(random_state = 42, max_depth = 4)
 regressor.fit(X_train, y_train)
 
 # plot the nodes of the decision tree
-plt.figure(figsize=(25,15))
+plt.figure(figsize=(75,35))
 tree = plot_tree(regressor,
                  feature_names = X.columns,
                  filled = True,
                  rounded = True,
-                 fontsize = 16)
+                 fontsize = 32)
 
 ```
 <br>
@@ -895,7 +896,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, rando
 <br>
 ##### Categorical Predictor Variables
 
-In our dataset, we have one categorical variable *gender* which has values of "M" for Male, "F" for Female, and "U" for Unknown.
+In our dataset, we have one categorical variable *gender* which has values of "M" for Male and "F" for Female.
 
 Just like the Linear Regression algorithm, Random Forests cannot deal with data in this format as it can't assign any numerical meaning to it when looking to assess the relationship between the variable and the dependent variable.
 
@@ -972,7 +973,7 @@ print(r_squared)
 
 ```
 
-The resulting r-squared score from this is **0.957** - higher than both Linear Regression & the Decision Tree.
+The resulting r-squared score from this is **0.959** - higher than both Linear Regression & the Decision Tree.
 
 <br>
 ##### Calculate Cross Validated R-Squared
@@ -988,7 +989,7 @@ cv_scores.mean()
 
 ```
 
-The mean cross-validated r-squared score from this is **0.923** which agian is higher than we saw for both Linear Regression & our Decision Tree.
+The mean cross-validated r-squared score from this is **0.930** which agian is higher than we saw for both Linear Regression & our Decision Tree.
 
 <br>
 ##### Calculate Adjusted R-Squared
@@ -1004,7 +1005,7 @@ print(adjusted_r_squared)
 
 ```
 
-The resulting *adjusted* r-squared score from this is **0.955** which as expected, is slightly lower than the score we got for r-squared on it's own - but again higher than for our other models.
+The resulting *adjusted* r-squared score from this is **0.954** which as expected, is slightly lower than the score we got for r-squared on it's own - but again higher than for our other models.
 
 <br>
 ### Feature Importance <a name="rf-model-feature-importance"></a>
@@ -1048,6 +1049,7 @@ feature_importance_summary.columns = ["input_variable","feature_importance"]
 feature_importance_summary.sort_values(by = "feature_importance", inplace = True)
 
 # plot feature importance
+plt.style.use('seaborn-poster')
 plt.barh(feature_importance_summary["input_variable"],feature_importance_summary["feature_importance"])
 plt.title("Feature Importance of Random Forest")
 plt.xlabel("Feature Importance")
@@ -1063,6 +1065,7 @@ permutation_importance_summary.columns = ["input_variable","permutation_importan
 permutation_importance_summary.sort_values(by = "permutation_importance", inplace = True)
 
 # plot permutation importance
+plt.style.use('seaborn-poster')
 plt.barh(permutation_importance_summary["input_variable"],permutation_importance_summary["permutation_importance"])
 plt.title("Permutation Importance of Random Forest")
 plt.xlabel("Permutation Importance")
@@ -1084,6 +1087,17 @@ The overall story from both approaches is very similar, in that by far, the most
 
 There are slight differences in the order or "importance" for the remaining variables but overall they have provided similar findings.
 
+<br>
+To use this model in the future, we will save it and the preprocessing code using the pickle package 
+
+```python
+
+# Save model and OneHotEncoder to run on the values we want to predict
+pickle.dump(regressor, open("data/random_forest_regression_model.p", "wb"))
+pickle.dump(one_hot_encoder, open("data/random_forest_regression_ohe.p", "wb"))
+
+```
+
 ___
 <br>
 # Modelling Summary  <a name="modelling-summary"></a>
@@ -1093,16 +1107,16 @@ The most important outcome for this project was predictive accuracy, rather than
 <br>
 **Metric 1: Adjusted R-Squared (Test Set)**
 
-* Random Forest = 0.955
-* Decision Tree = 0.886
-* Linear Regression = 0.754
+* Random Forest = 0.954
+* Decision Tree = 0.860
+* Linear Regression = 0.836
 
 <br>
 **Metric 2: R-Squared (K-Fold Cross Validation, k = 4)**
 
-* Random Forest = 0.925
-* Decision Tree = 0.871
-* Linear Regression = 0.853
+* Random Forest = 0.930
+* Decision Tree = 0.879
+* Linear Regression = 0.856
 
 <br>
 Even though we were not specifically interested in the drivers of prediction, it was interesting to see across all three modelling approaches, that the input variable with the biggest impact on the prediction was *distance_from_store* rather than variables such as *total sales*.  This is interesting information for the business, so discovering this as we went was worthwhile.
@@ -1132,11 +1146,11 @@ import pandas as pd
 import pickle
 
 # import customers for scoring
-to_be_scored = ...
+to_be_scored = pickle.load(open("data/abc_regression_scoring.p", "rb"))
 
 # import model and model objects
-regressor = ...
-one_hot_encoder = ...
+regressor = pickle.load(open("data/random_forest_regression_model.p", "rb"))
+one_hot_encoder = pickle.load(open("data/random_forest_regression_ohe.p", "rb"))
 
 # drop unused columns
 to_be_scored.drop(["customer_id"], axis = 1, inplace = True)
