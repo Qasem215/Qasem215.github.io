@@ -101,11 +101,13 @@ Using pandas in Python, we merged these tables together for all customers, creat
 # import required packages
 import pandas as pd
 import pickle
+# pickle is used to save and load data specific to python language such as dict, lists
+# it creates a portable serialized representations of Python objects.
 
 # import required data tables
-loyalty_scores = ...
-customer_details = ...
-transactions = ...
+loyalty_scores   = pd.read_excel(io = "data/grocery_database.xlsx", sheet_name = "loyalty_scores")
+customer_details = pd.read_excel(io = "data/grocery_database.xlsx", sheet_name = "customer_details")
+transactions     = pd.read_excel(io = "data/grocery_database.xlsx", sheet_name = "transactions")
 
 # merge loyalty score data and customer details data, at customer level
 data_for_regression = pd.merge(customer_details, loyalty_scores, how = "left", on = "customer_id")
@@ -243,18 +245,18 @@ In this code section, we use **.describe()** from Pandas to investigate the spre
 
 | **metric** | **distance_from_store** | **credit_score** | **total_sales** | **total_items** | **transaction_count** | **product_area_count** | **average_basket_value** |
 |---|---|---|---|---|---|---|---|
-| mean | 2.02 | 0.60 | 1846.50 | 278.30 | 44.93 | 4.31 | 36.78 |
-| std | 2.57 | 0.10 | 1767.83 | 214.24 | 21.25 | 0.73 | 19.34 |
-| min | 0.00 | 0.26 | 45.95 | 10.00 | 4.00 | 2.00 | 9.34 |
-| 25% | 0.71 | 0.53 | 942.07 | 201.00 | 41.00 | 4.00 | 22.41 |
-| 50% | 1.65 | 0.59 | 1471.49 | 258.50 | 50.00 | 4.00 | 30.37 |
-| 75% | 2.91 | 0.66 | 2104.73 | 318.50 | 53.00 | 5.00 | 47.21 |
-| max | 44.37 | 0.88 | 9878.76 | 1187.00 | 109.00 | 5.00 | 102.34 |
+| mean | 2.02 | 0.60 | 1846.50 | 278.30 | 20.86 | 4.31 | 97.77 |
+| std | 2.57 | 0.10 | 1767.83 | 214.24 | 10.86 | 0.73 | 88.05 |
+| min | 0.00 | 0.26 | 45.95 | 10.00 | 3.00 | 2.00 | 15.32 |
+| 25% | 0.71 | 0.53 | 942.07 | 201.00 | 15.00 | 4.00 | 33.08 |
+| 50% | 1.65 | 0.59 | 1471.49 | 258.50 | 23.00 | 4.00 | 63.84 |
+| 75% | 2.91 | 0.66 | 2104.73 | 318.50 | 23.00 | 5.00 | 126.10 |
+| max | 44.37 | 0.88 | 9878.76 | 1187.00 | 38.00 | 5.00 | 429.51 |
 
 <br>
 Based on this investigation, we see some *max* column values for several variables to be much higher than the *median* value.
 
-This is for columns *distance_from_store*, *total_sales*, and *total_items*
+This is for columns *distance_from_store*, *total_sales*, *total_items* and *average_basket_value*
 
 For example, the median *distance_to_store* is 1.645 miles, but the maximum is over 44 miles!
 
@@ -266,7 +268,7 @@ We do this using the "boxplot approach" where we remove any rows where the value
 ```python
 
 outlier_investigation = data_for_model.describe()
-outlier_columns = ["distance_from_store", "total_sales", "total_items"]
+outlier_columns = ["distance_from_store", "total_sales", "total_items", "average_basket_value"]
 
 # boxplot approach
 for column in outlier_columns:
@@ -307,7 +309,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, rando
 <br>
 ##### Categorical Predictor Variables
 
-In our dataset, we have one categorical variable *gender* which has values of "M" for Male, "F" for Female, and "U" for Unknown.
+In our dataset, we have one categorical variable *gender* which has values of "M" for Male and "F" for Female.
 
 The Linear Regression algorithm can't deal with data in this format as it can't assign any numerical meaning to it when looking to assess the relationship between the variable and the dependent variable.
 
@@ -328,7 +330,7 @@ For ease, after we have applied One Hot Encoding, we turn our training and test 
 categorical_vars = ["gender"]
 
 # instantiate OHE class
-one_hot_encoder = OneHotEncoder(sparse=False, drop = "first")
+one_hot_encoder = OneHotEncoder(sparse = False, drop = "first")
 
 # apply OHE
 X_train_encoded = one_hot_encoder.fit_transform(X_train[categorical_vars])
@@ -359,7 +361,7 @@ Feature Selection is the process used to select the input variables that are mos
 
 There are many, many ways to apply Feature Selection.  These range from simple methods such as a *Correlation Matrix* showing variable relationships, to *Univariate Testing* which helps us understand statistical relationships between variables, and then to even more powerful approaches like *Recursive Feature Elimination (RFE)* which is an approach that starts with all input variables, and then iteratively removes those with the weakest relationships with the output variable.
 
-For our task we applied a variation of Reursive Feature Elimination called *Recursive Feature Elimination With Cross Validation (RFECV)* where we split the data into many "chunks" and iteratively trains & validates models on each "chunk" seperately.  This means that each time we assess different models with different variables included, or eliminated, the algorithm also knows how accurate each of those models was.  From the suite of model scenarios that are created, the algorithm can determine which provided the best accuracy, and thus can infer the best set of input variables to use!
+For our task we applied a variation of Recursive Feature Elimination called *Recursive Feature Elimination With Cross Validation (RFECV)* where we split the data into many "chunks" and iteratively train & validate models on each "chunk" seperately.  This means that each time we assess different models with different variables included, or eliminated, the algorithm also knows how accurate each of those models was.  From the suite of model scenarios that are created, the algorithm can determine which provided the best accuracy, and thus can infer the best set of input variables to use!
 
 <br>
 ```python
@@ -390,14 +392,14 @@ plt.style.use('seaborn-poster')
 plt.plot(range(1, len(fit.cv_results_['mean_test_score']) + 1), fit.cv_results_['mean_test_score'], marker = "o")
 plt.ylabel("Model Score")
 plt.xlabel("Number of Features")
-plt.title(f"Feature Selection using RFE \n Optimal number of features is {optimal_feature_count} (at score of {round(max(fit.cv_results_['mean_test_score']),4)})")
+plt.title(f"Feature Selection using RFE \n Optimal number of features is {optimal_feature_count} \n (at score of {round(max(fit.cv_results_['mean_test_score']),4)})")
 plt.tight_layout()
 plt.show()
 
 ```
 
 <br>
-This creates the below plot, which shows us that the highest cross-validated accuracy (0.8635) is actually when we include all eight of our original input variables.  This is marginally higher than 6 included variables, and 7 included variables.  We will continue on with all 8!
+This creates the below plot, which shows us that the highest cross-validated accuracy (0.855) is actually when we include all eight of our original input variables.  This is marginally higher than 6 included variables, and 7 included variables.  We will continue on with all 8!
 
 <br>
 ![alt text](/img/posts/lin-reg-feature-selection-plot.png "Linear Regression Feature Selection Plot")
@@ -434,7 +436,7 @@ y_pred = regressor.predict(X_test)
 <br>
 ##### Calculate R-Squared
 
-R-Squared is a metric that shows the percentage of variance in our output variable *y* that is being explained by our input variable(s) *x*.  It is a value that ranges between 0 and 1, with a higher value showing a higher level of explained variance.  Another way of explaining this would be to say that, if we had an r-squared score of 0.8 it would suggest that 80% of the variation of our output variable is being explained by our input variables - and something else, or some other variables must account for the other 20%
+R-Squared is a metric that shows the percentage of variance in our output variable *y* that is being explained by our input variable(s) *X*.  It is a value that ranges between 0 and 1, with a higher value showing a higher level of explained variance.  Another way of explaining this would be to say that, if we had an r-squared score of 0.8 it would suggest that 80% of the variation of our output variable is being explained by our input variables - and something else, or some other variables must account for the other 20%
 
 To calculate r-squared, we use the following code where we pass in our *predicted* outputs for the test set (y_pred), as well as the *actual* outputs for the test set (y_test)
 
@@ -446,7 +448,7 @@ print(r_squared)
 
 ```
 
-The resulting r-squared score from this is **0.78**
+The resulting r-squared score from this is **0.85**
 
 <br>
 ##### Calculate Cross Validated R-Squared
@@ -470,7 +472,7 @@ cv_scores.mean()
 
 ```
 
-The mean cross-validated r-squared score from this is **0.853**
+The mean cross-validated r-squared score from this is **0.86**
 
 <br>
 ##### Calculate Adjusted R-Squared
@@ -488,7 +490,7 @@ print(adjusted_r_squared)
 
 ```
 
-The resulting *adjusted* r-squared score from this is **0.754** which as expected, is slightly lower than the score we got for r-squared on it's own.
+The resulting *adjusted* r-squared score from this is **0.84** which as expected, is slightly lower than the score we got for r-squared on it's own.
 
 <br>
 ### Model Summary Statistics <a name="linreg-model-summary"></a>
@@ -513,22 +515,22 @@ The information from that code block can be found in the table below:
 
 | **input_variable** | **coefficient** |
 |---|---|
-| intercept | 0.516 |
-| distance_from_store | -0.201 |
-| credit_score | -0.028 |
+| intercept | 0.313 |
+| distance_from_store | -0.169 |
+| credit_score | -0.058 |
 | total_sales | 0.000 |
 | total_items | 0.001 |
-| transaction_count | -0.005 |
-| product_area_count | 0.062 |
-| average_basket_value | -0.004 |
-| gender_M | -0.013 |
+| transaction_count | 0.006 |
+| product_area_count | 0.038 |
+| average_basket_value | 0.003 |
+| gender_M | 0.045 |
 
 <br>
 The coefficient value for each of the input variables, along with that of the intercept would make up the equation for the line of best fit for this particular model (or more accurately, in this case it would be the plane of best fit, as we have multiple input variables).
 
 For each input variable, the coefficient value we see above tells us, with *everything else staying constant* how many units the output variable (loyalty score) would change with a *one unit change* in this particular input variable.
 
-To provide an example of this - in the table above, we can see that the *distance_from_store* input variable has a coefficient value of -0.201.  This is saying that *loyalty_score* decreases by 0.201 (or 20% as loyalty score is a percentage, or at least a decimal value between 0 and 1) for *every additional mile* that a customer lives from the store.  This makes intuitive sense, as customers who live a long way from this store, most likely live near *another* store where they might do some of their shopping as well, whereas customers who live near this store, probably do a greater proportion of their shopping at this store...and hence have a higher loyalty score!
+To provide an example of this - in the table above, we can see that the *distance_from_store* input variable has a coefficient value of -0.169.  This is saying that *loyalty_score* decreases by 0.169 (or 17% as loyalty score is a percentage, or at least a decimal value between 0 and 1) for *every additional mile* that a customer lives from the store.  This makes intuitive sense, as customers who live a long way from this store, most likely live near *another* store where they might do some of their shopping as well, whereas customers who live near this store, probably do a greater proportion of their shopping at this store...and hence have a higher loyalty score!
 
 ___
 <br>
