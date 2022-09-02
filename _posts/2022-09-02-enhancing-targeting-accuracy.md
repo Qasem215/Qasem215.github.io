@@ -1174,7 +1174,7 @@ That code gives us the below plots - the first being for *Feature Importance* an
 <br>
 The overall story from both approaches is very similar, in that by far, the most important or impactful input variables are *distance_from_store* and *transaction_count*
 
-Surprisingly, *average_basket_size* was not as important as hypothesised.
+Surprisingly, *average_basket_value* was not as important as hypothesised.
 
 There are slight differences in the order or "importance" for the remaining variables but overall they have provided similar findings.
 
