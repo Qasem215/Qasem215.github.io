@@ -101,8 +101,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # import tables from database
-transactions = ...
-product_areas = ...
+transactions = pd.read_excel( "data/grocery_database.xlsx", "transactions")
+product_areas = pd.read_excel( "data/grocery_database.xlsx", "product_areas")
 
 # merge product_area_name on
 transactions = pd.merge(transactions, product_areas, how = "inner", on = "product_area_id")
