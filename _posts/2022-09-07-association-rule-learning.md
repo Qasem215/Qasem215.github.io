@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Understanding Alcohol Product Relationships Using Association Rule Learning
+title: Understanding Grocery Products Relationships Using Association Rule Learning
 image: "/posts/association-rules-title-img.jpg"
 tags: [Association Rule Learning, Python]
 ---
