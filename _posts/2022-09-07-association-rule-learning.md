@@ -29,7 +29,7 @@ ___
 
 Our client is looking to re-jig their store.  Customers are often complaining that they can't find the products they want, and are also wanting recommendations about which other products to try.  On top of this, their marketing team would like to start running "bundled" promotions as this has worked well in other areas of the store - but need guidance with selecting which products to put together.
 
-They have provided us a sample of 3,500 transactions - our task is fairly open - to see if we can find solutions or insights that might help the business address the aforementioned problems!
+They have provided us a sample of 9,800 transactions - our task is fairly open - to see if we can find solutions or insights that might help the business address the aforementioned problems!
 
 <br>
 <br>
@@ -55,17 +55,13 @@ These metrics examine product relationships in different ways, so we utilise eac
 
 ### Results <a name="overview-results"></a>
 
-Interestingly, the strongest relationship existed between two products labelled as "gifts" - this is useful information for the category managers as they may want to ensure that gift products are available in one section of the aisle, rather than existing in their respective product types.
+Interestingly, the strongest relationship existed between two easy to cook food products - this is useful information for the category managers as they may want to ensure that these products are available in one section of the store, rather than existing in their respective product types.
 
-We also saw some strong relationships between French wines, and other French wines - which again is extremely useful for category managers who are thinking about the best way to lay out the products - having sections by country rather than necessarily by type might make it easier for customers to find what they are after.
-
-Another interesting association is between products labelled "small".  At this point, we don't know exactly what that means - but it is certainly something to take back to the client as they may be able to make more sense of it, and turn it into an actionable insight!
+We also saw some strong relationships between baking products - which again is extremely useful for category managers who are thinking about the best way to lay out the products - having sections by product category rather than necessarily by type might make it easier for customers to find what they are after.
 
 We propose to also build a "search engine" for category managers where they can look-up products by keyword in the product association table.
 
-As an example - we search for any products that associate strongly with "New Zealand" products. There appeared to be *some* relationship between New Zealand wines and other New Zealand wines, but what was also interesting was that New Zealand wines seemed to be more associated with French & South American wines than they were with Australian Wines.
-
-New Zealand & Australia are often grouped together, but in terms of wine this wouldn't make sense - perhaps because of the difference climates the wines are very different and thus it wouldn't make sense to group wines by geographical proximity, but by preference instead.  This is only a hypothesis for now - we will need to take this back to the client and get their category experts to help us interpret it!
+As an example - we search for any products that associate strongly with "juice" products.
 
 <br>
 <br>
@@ -84,7 +80,7 @@ ___
 
 # Data Overview  <a name="data-overview"></a>
 
-Our initial dataset contains 3,500 transactions, each of which shows the alcohol products that were present in that transaction.  
+Our initial dataset contains 9,800 transactions, each of which shows the grocery products that were present in that transaction.  
 
 In the code below, we import Pandas, as well as the apriori algorithm from the apyori library, and we bring the raw data into Python.
 <br>
@@ -95,7 +91,7 @@ import pandas as pd
 from apyori import apriori
 
 # import the sample data
-alcohol_transactions = pd.read_csv("data/sample_data_apriori.csv")
+grocery_transactions = pd.read_csv("data/groceries - groceries.csv")
 
 ```
 <br>
@@ -104,26 +100,26 @@ A sample of this data (the first 10 transactions) can be seen below:
 <br>
 <br>
 
-| **transaction_id** | **product1** | **product2** | **product3** | **product4** | **product5** | **…** |
+| **transaction_id** | **Item 1** | **Item 2** | **Item 3** | **Item 4** | **Item 5** | **…** |
 |---|---|---|---|---|---|---|
-| 1 | Premium Lager | Iberia | … |  |  | ... |
-| 2 | Sparkling | Premium Lager | Premium Cider | Own Label | Italy White | … |
-| 3 | Small Sizes White | Small Sizes Red | Sherry Spanish | No/Low Alc Cider | Cooking Wine | … |
-| 4 | White Uk | Sherry Spanish | Port | Italian White | Italian Red | … |
-| 5 | Premium Lager | Over-Ice Cider | French White South | French Rose | Cocktails/Liqueurs | … |
-| 6 | Kosher Red | … |  |  |  | ... |
-| 7 | Own Label | Italy White | Australian Red | … |  | ... |
-| 8 | Brandy/Cognac | … |  |  |  | ... |
-| 9 | Small Sizes White | Bottled Ale | … |  |  | ... |
-| 10 | White Uk | Spirits Mixers | Sparkling | German | Australian Red | … |
+| 1 | citrus fruit | semi-finished bread| margarine | ready soups | … | ... |
+| 2 | tropical fruit | yogurt | coffee | … | ... |
+| 3 | whole milk | … | ... |
+| 4 | pip fruit | yogurt | cream cheese | meat spreads | … | ... |
+| 5 | other vegetables | whole milk | condensed milk | long life bakery product | … | ... |
+| 6 | whole milk | butter | yogurt | rice | abrasive cleaner | ... |
+| 7 | rolls/buns | … | ... |
+| 8 | other vegetables | UHT-milk | rolls/buns | tomato juice| white vinegar | ... |
+| 9 | potted plants | …  | ... |
+| 10 | whole milk | cereals | … | ... |
 | … | … | … | … | … | … | … |
 
 <br>
-To explain this data, *Transaction 1* (the first row) contained two products, Premium Lager, and Iberia.  As there were only two products in this transaction, the remaining columns are blank.
+To explain this data, *Transaction 1* (the first row) contained four products, citrus fruit, semi-finished bread, margarine and ready soups.  As there were only four products in this transaction, the remaining columns are blank.
 
-Transaction 2 (the second row) contained nine products (not all shown in the snippet).  The first nine columns for this row are therefore populated, followed by blank values.
+Transaction 2 (the second row) contained three products. The first three columns for this row are therefore populated, followed by blank values.
 
-For our sample data, the maximum number of unique products was 45, meaning the table of data had a total of 46 columns (45 for products + transaction_id).
+For our sample data, the maximum number of unique items was 32, meaning the table of data had a total of 33 columns (32 for items + transaction_id).
 
 The *apyori* library that we are using does not want the data in this format, it instead wants it passed in as a *list of lists* so we will need to modify it.  The code and logic for this can be found in the Data Preparation section below.
 
@@ -212,27 +208,18 @@ In the code below, we:
 ```python
 
 # drop ID column
-alcohol_transactions.drop("transaction_id", axis = 1, inplace = True)
+grocery_transactions.drop("transaction_id", axis = 1, inplace = True)
 
 # modify data for apriori algorithm
 transactions_list = []
-for index, row in alcohol_transactions.iterrows():
+for index, row in grocery_transactions.iterrows():
     transaction = list(row.dropna())
     transactions_list.append(transaction)
     
 # print out first 10 lists from master list
 print(transactions_list[:10])
 
-[['Premium Lager', 'Iberia'],
- ['Sparkling', 'Premium Lager', 'Premium Cider', 'Own Label', 'Italy White', 'Italian White', 'Italian Red', 'French Red', 'Bottled Ale'],
- ['Small Sizes White', 'Small Sizes Red', 'Sherry Spanish', 'No/Low Alc Cider', 'Cooking Wine', 'Cocktails/Liqueurs', 'Bottled Ale'],
- ['White Uk', 'Sherry Spanish', 'Port', 'Italian White', 'Italian Red'],
- ['Premium Lager', 'Over-Ice Cider', 'French White South', 'French Rose', 'Cocktails/Liqueurs', 'Bottled Ale'],
- ['Kosher Red'],
- ['Own Label', 'Italy White', 'Australian Red'],
- ['Brandy/Cognac'],
- ['Small Sizes White', 'Bottled Ale'],
- ['White Uk', 'Spirits Mixers', 'Sparkling', 'German', 'Australian Red', 'American Red']]
+[['citrus fruit', 'semi-finished bread', 'margarine', 'ready soups'], ['tropical fruit', 'yogurt', 'coffee'], ['whole milk'], ['pip fruit', 'yogurt', 'cream cheese', 'meat spreads'], ['other vegetables', 'whole milk', 'condensed milk', 'long life bakery product'], ['whole milk', 'butter', 'yogurt', 'rice', 'abrasive cleaner'], ['rolls/buns'], ['other vegetables', 'UHT-milk', 'rolls/buns', 'tomato juice', 'white vinegar'], ['potted plants'], ['whole milk', 'cereals']]
 
 ```
 <br>
@@ -268,7 +255,7 @@ apriori_rules = list(apriori_rules)
 # print out the first element
 apriori_rules[0]
 
-RelationRecord(items=frozenset({'America White', 'American Rose'}), support=0.020745724698626296, ordered_statistics=[OrderedStatistic(items_base=frozenset({'American Rose'}), items_add=frozenset({'America White'}), confidence=0.5323741007194245, lift=3.997849299507762)])
+RelationRecord(items=frozenset({'hamburger meat', 'Instant food products'}), support=0.003050330452465684, ordered_statistics=[OrderedStatistic(items_base=frozenset({'Instant food products'}), items_add=frozenset({'hamburger meat'}), confidence=0.379746835443038, lift=11.42143769597027)])
 
 ```
 <br>
@@ -300,11 +287,11 @@ A sample of this data (the first 5 product pairs - not in any order) can be seen
 
 | **product1** | **product2** | **support** | **confidence** | **lift** |
 |---|---|---|---|---|
-| American Rose | America White | 0.021 | 0.532 | 3.998 |
-| America White | American White | 0.054 | 0.408 | 3.597 |
-| Australian Rose | America White | 0.005 | 0.486 | 3.653 |
-| Low Alcohol A.C | America White | 0.003 | 0.462 | 3.466 |
-| American Rose | American Red | 0.016 | 0.403 | 3.575 |
+| Instant food products | hamburger meat | 0.003 | 0.380 | 11.421 |
+| apple juice | tomato juice | 0.005 | 0.254 | 3.154 |
+| baking powder | whipped/sour cream | 0.005 | 0.259 | 3.608 |
+| beef | root vegetables | 0.0174 | 0.331 | 3.040 |
+| berries | whipped/sour cream | 0.009 | 0.272 | 3.797 |
 | … | … | … | … | … |
 
 <br>
@@ -333,38 +320,35 @@ In the table below, we can see the ten highest product relationships, based upon
 
 | **product1** | **product2** | **support** | **confidence** | **lift** |
 |---|---|---|---|---|
-| Wine Gifts | Beer/Lager Gifts | 0.004 | 0.314 | 10.173 |
-| Beer/Lager Gifts | Spirits & Fortified | 0.013 | 0.427 | 9.897 |
-| Wine Gifts | Spirits & Fortified | 0.006 | 0.412 | 9.537 |
-| Red Wine Bxes & 25Cl | White Boxes | 0.015 | 0.474 | 9.344 |
-| French White Rhone | French Red | 0.003 | 0.480 | 8.691 |
-| Small Sizeswhite Oth | Small Sizes White | 0.005 | 0.559 | 8.340 |
-| Small Sizes Red | Small Sizes White | 0.025 | 0.486 | 7.258 |
-| French White Loire | French White South | 0.004 | 0.349 | 6.763 |
-| French White Rhone | French White 2 | 0.005 | 0.760 | 6.661 |
-| Small Sizeswhite Oth | Small Sizes Red | 0.003 | 0.324 | 6.306 |
-| Small Sizes Wht Othr | Small Sizes White | 0.003 | 0.414 | 6.176 |
+| Instant food products | hamburger meat | 0.003 | 0.38 | 11.421 | 
+| flour | sugar | 0.005 | 0.287 | 8.463 | 
+| processed cheese | white bread | 0.004 | 0.252 | 5.975 | 
+| mix fruit juice | tomato juice | 0.005 | 0.422 | 5.241 | 
+| herbs | root vegetables | 0.007 | 0.431 | 3.956 | 
+| berries | whipped/sour cream | 0.009 | 0.272 | 3.797 | 
+| rice | root vegetables | 0.003 | 0.413 | 3.792 | 
+| flour | margarine | 0.004 | 0.216 | 3.695 | 
+| baking powder | whipped/sour cream | 0.005 | 0.259 | 3.608 | 
+| flour | whipped/sour cream | 0.004 | 0.234 | 3.263 | 
 
 <br>
-Interestingly, the strongest relationship exists between two products labelled as "gifts" - this is useful information for the category managers as they may want to ensure that gift products are available in one section of the aisle, rather than existing in their respective product types.
+Interestingly, the strongest relationship existed between two easy to cook food products - this is useful information for the category managers as they may want to ensure that these products are available in one section of the store, rather than existing in their respective product types.
 
-We also see some strong relationships between French wines, and other French wines - which again is extremely useful for category managers who are thinking about the best way to lay out the products - having sections by country rather than necessarily by type might make it easier for customers to find what they are after.
-
-Another interesting association is between products labelled "small".  At this point, we don't know exactly what that means - but it is certainly something to take back to the client as they may be able to make more sense of it, and turn it into an actionable insight!
+We also saw some strong relationships between baking products - which again is extremely useful for category managers who are thinking about the best way to lay out the products - having sections by product category rather than necessarily by type might make it easier for customers to find what they are after.
 
 <br>
 #### Search Tool For Category Managers
 
 With the data now stored as a DataFrame, we will also go back to the client with a proposal to build a simple "search" tool for Category Managers to use.
 
-An example of how this might work would be to test a hypothesis around New Zealand wines.
+An example of how this might work would be to test a hypothesis around juice products.
 
-The code below uses a string function to pull back all rows in the DataFrame where *product1* contains the words "New Zealand"
+The code below uses a string function to pull back all rows in the DataFrame where *product1* contains the words "juice"
 
 ```python
 
 # search based upon text
-apriori_rules_df[apriori_rules_df["product1"].str.contains("New Zealand")]
+apriori_rules_df[apriori_rules_df["product1"].str.contains("juice")]
 
 ```
 <br>
@@ -374,26 +358,12 @@ The results of this search, in order of descending Lift are as follows:
 
 | **product1** | **product2** | **support** | **confidence** | **lift** |
 |---|---|---|---|---|
-| New Zealand Red | Malt Whisky | 0.005326605 | 0.271428571 | 5.628986711 |
-| New Zealand Red | Iberia White | 0.007289038 | 0.371428571 | 4.616326531 |
-| New Zealand Red | New Zealand White | 0.012615643 | 0.642857143 | 4.613825812 |
-| New Zealand Red | French White South | 0.004485562 | 0.228571429 | 4.431055901 |
-| New Zealand Red | French White 2 | 0.009531819 | 0.485714286 | 4.256862057 |
-| New Zealand Red | French Red | 0.004205214 | 0.214285714 | 3.879985497 |
-| New Zealand Red | French Red South | 0.006447996 | 0.328571429 | 3.868033946 |
-| New Zealand Red | South America | 0.010933558 | 0.557142857 | 3.799863425 |
-| New Zealand Red | Other Red | 0.004485562 | 0.228571429 | 3.591692889 |
-| New Zealand Red | Iberia | 0.012054948 | 0.614285714 | 3.528433402 |
-| New Zealand Red | Champagne | 0.008690777 | 0.442857143 | 3.526052296 |
-| New Zealand White | South America White | 0.049341183 | 0.354124748 | 3.423205902 |
-| New Zealand Red | French Red 2 | 0.010092515 | 0.514285714 | 3.359811617 |
-| New Zealand Red | South America White | 0.006728343 | 0.342857143 | 3.314285714 |
-| New Zealand Red | Australia White | 0.007289038 | 0.371428571 | 3.215742025 |
+| mix fruit juice | tomato juice | 0.005 | 0.422 | 5.241 | 
+| apple juice | tomato juice | 0.005 | 0.254 | 3.154 | 
+
 
 <br>
-There appears to be *some* relationship between New Zealand wines and other New Zealand wines, but what is also interesting is that New Zealand wines seem to be more associated with French & South American wines than they are with Australian Wines.
-
-New Zealand & Australia are often grouped together, but in terms of wine this wouldn't make sense - perhaps because of the difference climates the wines are very different and thus it wouldn't make sense to group wines by geographical proximity, but by preference instead.  This is only a hypothesis for now - we will need to take this back to the client and get their category experts to help us interpret it!
+There appears to be *some* relationship between juice products being bought together, but this should be investigated furthur
 
 ___
 <br>
