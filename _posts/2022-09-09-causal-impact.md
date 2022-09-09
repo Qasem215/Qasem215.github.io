@@ -100,7 +100,7 @@ Causal Impact is a time-series technique, originally developed by Google.
 
 It estimates what *would have happened* (known as a "counterfactual") by applying a model to *comparable data* in a pre-period and projecting this model onto that data in a post-period. The difference between the actual data and the counterfactual in the post-period, is the estimated impact of the event.
 
-The *comparable data* that we pass in can be a control group, another set of related data, or even multiple sets of related data - but for this approach to work robustly & reliably, this additional data must must adhere to several rules:
+The *comparable data* that we pass in can be a control group, another set of related data, or even multiple sets of related data - but for this approach to work robustly & reliably, this additional data must adhere to several rules:
 
 It must not be affected by the event that we’re measuring, but it must be predictive of our output, or have some relationship with our initial time-series data.
 
@@ -147,11 +147,11 @@ from causalimpact import CausalImpact
 import pandas as pd
 
 # import data tables
-transactions = ...
-campaign_data = ...
+transactions = pd.read_excel("data/grocery_database.xlsx", sheet_name = "transactions")
+campaign_data = pd.read_excel("data/grocery_database.xlsx", sheet_name = "campaign_data")
 
 # aggregate transaction data to customer, date level
-customer_daily_sales = transactions.groupby(["customer_id", "transaction_date"])["sales_cost"].sum().reset_index()
+customer_daily_sales = transactions.groupby(["customer_id", "transaction_date"]).agg({"sales_cost": "sum"}).reset_index()
 
 # merge on the signup flag
 customer_daily_sales = pd.merge(customer_daily_sales, campaign_data, how = "inner", on = "customer_id")
@@ -168,7 +168,7 @@ causal_impact_df.index.freq = "D"
 # ensure the impacted group is in the first column (the library expects this)
 causal_impact_df = causal_impact_df[[1,0]]
 
-# rename columns to something lear & meaningful
+# rename columns to something clear & meaningful
 causal_impact_df.columns = ["member", "non_member"]
 
 ```
